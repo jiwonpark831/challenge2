@@ -20,12 +20,12 @@ struct HomePage: View {
                 .ignoresSafeArea(.all)
 
                 VStack {
-                    NavigationLink{
+                    NavigationLink {
                         ArchivePage()
-                    }label: {
+                    } label: {
                         Image(systemName: "key.fill")
                     }
-                   
+
                     Text("지지님,")
                     Text("오늘은 어떤 것이 감사했나요")
 

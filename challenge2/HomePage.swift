@@ -23,7 +23,7 @@ struct HomePage: View {
                     NavigationLink {
                         ArchivePage()
                     } label: {
-                        Image(systemName: "key.fill")
+                        Image(systemName: "shippingbox.fill")
                     }
 
                     Text("지지님,")
@@ -32,7 +32,8 @@ struct HomePage: View {
                     NavigationLink {
                         CreatePage()
                     } label: {
-                        Image("ball").resizable().frame(width: 375, height: 695)
+                        Image("defaultball").resizable().frame(
+                            width: 320, height: 320)
                     }
 
                     Text("구슬을 눌러 감사한 일을 기록해보세요")

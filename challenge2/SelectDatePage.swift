@@ -23,9 +23,11 @@ struct SelectDatePage: View {
                 VStack {
                     Text("감사 구슬을 언제 다시 열어볼까요?")
                     DatePicker(
-                        "start date", selection: $selectDate,
+                        "", selection: $selectDate,
                         displayedComponents: [.date]
-                    ).datePickerStyle(.graphical)
+                    ).datePickerStyle(.graphical).environment(
+                        \.locale, .init(identifier: "ko_KR"))
+
                     Button("감사 저장소로 보내기") {
                         isComplete = true
                     }

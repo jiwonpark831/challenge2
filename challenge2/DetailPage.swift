@@ -1,13 +1,15 @@
 //
-//  MakeBallPage.swift
+//  DetailPage.swift
 //  challenge2
 //
-//  Created by jiwon on 4/14/25.
+//  Created by jiwon on 4/15/25.
 //
 
 import SwiftUI
 
-struct MakeBallPage: View {
+struct DetailPage: View {
+
+    @State private var removeButton: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -17,7 +19,6 @@ struct MakeBallPage: View {
                         Color("primary2"), Color("secondary2"),
                     ]), startPoint: .top, endPoint: .bottom)
                 VStack {
-                    Text("구슬이 감사 저장소에 저장되었어요")
                     VStack {
                         Text(
                             "\(CreatePage.today, formatter: CreatePage.dateformat)"
@@ -27,11 +28,20 @@ struct MakeBallPage: View {
                     }.frame(width: 343, height: 495).background(
                         RoundedRectangle(cornerRadius: 29).foregroundColor(
                             .white
-                        ).opacity(0.5))
-                    NavigationLink {
-                        HomePage()
-                    } label: {
-                        Text("홈으로")
+                        ).opacity(0.7))
+                    HStack {
+                        Button("수정") {
+
+                        }
+                        Button("삭제") {
+                            removeButton = true
+                        }.alert("감사 구슬을 삭제할까요?", isPresented: $removeButton) {
+                            Button("아니요", role: .cancel) {
+                            }
+                            Button("네") {
+
+                            }
+                        }
                     }
                 }
             }.ignoresSafeArea(.all)
@@ -40,5 +50,5 @@ struct MakeBallPage: View {
 }
 
 #Preview {
-    MakeBallPage()
+    DetailPage()
 }

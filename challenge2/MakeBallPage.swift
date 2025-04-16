@@ -14,7 +14,7 @@ struct MakeBallPage: View {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color("primary2"), Color("secondary2"),
+                        .cpink, .cblue,
                     ]), startPoint: .top, endPoint: .bottom)
                 VStack {
                     Text("구슬이 감사 저장소에 저장되었어요")

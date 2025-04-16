@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct DetailPage: View {
-    
+
     @State private var removeButton: Bool = false
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color("primary2"), Color("secondary2"),
+                        .cpink, .cblue,
                     ]), startPoint: .top, endPoint: .bottom)
                 VStack {
                     VStack {
@@ -27,7 +27,7 @@ struct DetailPage: View {
                         Text("내용 자리")
                     }.frame(width: 343, height: 495).background(
                         RoundedRectangle(cornerRadius: 29).foregroundColor(
-                            .white
+                            .cwhite
                         ).opacity(0.7))
                     HStack {
                         NavigationLink {
@@ -41,7 +41,7 @@ struct DetailPage: View {
                             Button("아니요", role: .cancel) {
                             }
                             Button("네") {
-                                
+
                             }
                         }
                     }

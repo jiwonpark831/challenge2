@@ -17,7 +17,7 @@ struct SelectDatePage: View {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color("primary2"), Color("secondary2"),
+                        .cpink, .cblue,
                     ]), startPoint: .top, endPoint: .bottom)
 
                 VStack {

@@ -18,7 +18,7 @@ struct ArchivePage: View {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color("secondary2"), Color("primary2"),
+                        .cblue, .cpink,
                     ]), startPoint: .top, endPoint: .bottom
                 ).ignoresSafeArea(.all)
                 ScrollView {

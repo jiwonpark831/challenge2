@@ -19,7 +19,7 @@ struct UpdatePage: View {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color("primary2"), Color("secondary2"),
+                        .cpink, .cblue,
                     ]), startPoint: .top, endPoint: .bottom)
                 VStack {
                     Text(
@@ -38,7 +38,7 @@ struct UpdatePage: View {
                             }
 
                         }.frame(width: 315, height: 191).background(
-                            Color("text2").opacity(0.7)
+                            .cwhite.opacity(0.7)
                         ).cornerRadius(10)
                     }
                     .onChange(of: selectPic) { uploadPic in
@@ -55,7 +55,7 @@ struct UpdatePage: View {
                     TextField(text: $newText) {
                         Text("감사 내용을 입력하세요")
                     }.frame(width: 315, height: 191, alignment: .topLeading)
-                        .background(Color("text2").opacity(0.7)).cornerRadius(
+                        .background(.cwhite.opacity(0.7)).cornerRadius(
                             10)
                     NavigationLink {
                         UpdatedPage()

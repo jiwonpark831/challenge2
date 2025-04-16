@@ -13,7 +13,7 @@ struct HomePage: View {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color("primary"), Color("secondary"),
+                        .cpurple, .cyellow,
                     ]),
                     startPoint: .top, endPoint: .bottom
                 )

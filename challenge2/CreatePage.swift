@@ -33,14 +33,64 @@ struct CreatePage: View {
                     Text(
                         "\(CreatePage.today, formatter: CreatePage.dateformat)")
                     Text("아주 작은 것이라도 좋아요")
-                    ZStack {
-                        PhotosPicker(selection: $selectPic, matching: .images) {
+                    //                    ZStack {
+                    //                        PhotosPicker(selection: $selectPic, matching: .images) {
+                    //                            Image("selectpic").resizable().frame(
+                    //                                width: 71, height: 44)
+                    //                        }
+                    //                        .onChange(of: selectPic) { uploadPic in
+                    //                            Task {
+                    //                                if let data = try? await uploadPic?
+                    //                                    .loadTransferable(type: Data.self),
+                    //                                    let img = UIImage(data: data)
+                    //                                {
+                    //                                    pic = Image(uiImage: img)
+                    //                                } else {
+                    //                                }
+                    //                            }
+                    //                        }
+                    //
+                    //                        if let image = pic {
+                    //                            image
+                    //                                .resizable()
+                    //                                .scaledToFit()
+                    //                                .frame(height: 169)
+                    //                                .cornerRadius(10)
+                    //                        }
+                    //
+                    //                    }.frame(width: 315, height: 191).background(
+                    //                        Color("text2").opacity(0.7)
+                    //                    ).cornerRadius(10)
+
+                    PhotosPicker(selection: $selectPic, matching: .images) {
+                        ZStack {
                             Image("selectpic").resizable().frame(
                                 width: 71, height: 44)
+
+                            if let image = pic {
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 169)
+                                    .cornerRadius(10)
+                            }
+
+                        }.frame(width: 315, height: 191).background(
+                            Color("text2").opacity(0.7)
+                        ).cornerRadius(10)
+                    }
+                    .onChange(of: selectPic) { uploadPic in
+                        Task {
+                            if let data = try? await uploadPic?
+                                .loadTransferable(type: Data.self),
+                                let img = UIImage(data: data)
+                            {
+                                pic = Image(uiImage: img)
+                            } else {
+                            }
                         }
-                    }.frame(width: 315, height: 191).background(
-                        Color("text2").opacity(0.7)
-                    ).cornerRadius(10)
+                    }
+
                     TextField(text: $newText) {
                         Text("감사 내용을 입력하세요")
                     }.frame(width: 315, height: 191, alignment: .topLeading)

@@ -8,19 +8,42 @@
 import SwiftUI
 
 struct ArchivePage: View {
+
+    let columns = [GridItem(), GridItem()]
+    var ball = ["defaultball", "defaultball", "defaultball"]
+    var date = ["defaultball", "defaultball", "defaultball"]
+
     var body: some View {
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color("secondary2"), Color("primary2"),
-                ]), startPoint: .top, endPoint: .bottom
-            ).ignoresSafeArea(.all)
-            VStack{
-                Text("지지님이 기록한")
-                Text("감사의 순간을 꺼내보세요")
-                Text("총 9개의 구슬이 있어요")
-//                LazyVGrid(columns: <#T##[GridItem]#>, content: <#T##() -> View#>)
-                
+        NavigationStack {
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color("secondary2"), Color("primary2"),
+                    ]), startPoint: .top, endPoint: .bottom
+                ).ignoresSafeArea(.all)
+                ScrollView {
+                    VStack {
+                        Text("지지님이 기록한")
+                        Text("감사의 순간을 꺼내보세요")
+                        let i = ball.count
+                        Text("총 \(i)개의 구슬이 있어요")
+                        LazyVGrid(columns: columns) {
+                            ForEach(0..<ball.count, id: \.self) {
+                                index in
+                                NavigationLink {
+                                    DetailPage()
+                                } label: {
+                                    VStack {
+                                        Image(ball[index]).resizable().frame(
+                                            width: 140, height: 140)
+                                        Text(date[index])
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
             }
         }
     }

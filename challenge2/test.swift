@@ -1,51 +1,61 @@
-//
-//  test.swift
-//  challenge2
-//
-//  Created by jiwon on 4/15/25.
-//
-
 import SwiftUI
-import PhotosUI
 
 struct test: View {
-    @State private var selectedItem: PhotosPickerItem? = nil
-    @State private var selectedImage: Image? = nil
-
+    @State var path = NavigationPath()
+    
     var body: some View {
-        VStack(spacing: 20) {
-            if let image = selectedImage {
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 200)
-                    .cornerRadius(10)
+        
+        NavigationStack(path: $path) {
+            VStack {
+                Text("Root View").font(.title)
+                
+                Button(action: {
+                    path.append("next view")
+                }, label: {
+                    Text("See Next view")
+                })
             }
-
-            PhotosPicker(
-                selection: $selectedItem,
-                matching: .images
-            ) {
-                Text("Select One Photo")
-                    .foregroundColor(.blue)
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
-            }
-        }
-        .padding()
-        .onChange(of: selectedItem) { newItem in
-            Task {
-                if let data = try? await newItem?.loadTransferable(type: Data.self),
-                   let uiImage = UIImage(data: data) {
-                    selectedImage = Image(uiImage: uiImage)
-                } else {
-                    print("❌ 이미지 로딩 실패")
+            .navigationDestination(for: String.self) { string in
+                if string == "next view" {
+                    NextView(path: $path)
+                } else if string == "next next view" {
+                    NextNextView(path: $path)
                 }
             }
         }
     }
 }
+
+struct NextView: View {
+    @Binding var path: NavigationPath
+    
+    var body: some View {
+        Text("Next View").font(.title)
+        
+        Button(action: {
+            path.append("next next view")
+        }, label: {
+            Text("See Next next view")
+        })
+    }
+}
+
+struct NextNextView: View {
+    @Binding var path: NavigationPath
+    
+    var body: some View {
+        Text("Next next view").font(.title)
+        
+        Button {
+            while path.count > 0 {
+                path.removeLast()
+            }
+        } label: {
+            Text("Back to root view")
+        }
+    }
+}
+
 
 
 #Preview {

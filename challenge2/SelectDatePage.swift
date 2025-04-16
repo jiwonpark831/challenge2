@@ -9,46 +9,51 @@ import SwiftUI
 
 struct SelectDatePage: View {
 
-    @State private var isComplete = false
+    //    @State private var isComplete = false
     @State private var selectDate = Date()
 
+    @Binding var path: NavigationPath
+
     var body: some View {
-        NavigationStack {
-            ZStack {
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        .cpink, .cblue,
-                    ]), startPoint: .top, endPoint: .bottom)
+        ZStack {
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    .cpink, .cblue,
+                ]), startPoint: .top, endPoint: .bottom)
 
-                VStack {
-                    Text("감사 구슬을 언제 다시 열어볼까요?")
-                    DatePicker(
-                        "", selection: $selectDate,
-                        displayedComponents: [.date]
-                    ).datePickerStyle(.graphical).environment(
-                        \.locale, .init(identifier: "ko_KR"))
+            VStack {
+                Text("감사 구슬을 언제 다시 열어볼까요?")
+                DatePicker(
+                    "", selection: $selectDate,
+                    displayedComponents: [.date]
+                ).datePickerStyle(.graphical).environment(
+                    \.locale, .init(identifier: "ko_KR"))
 
-                    Button("감사 저장소로 보내기") {
-                        isComplete = true
-                    }
-                    NavigationLink(
-                        destination: MakeBallPage(), isActive: $isComplete
-                    ) {
-
-                    }.hidden()
-                    //                    if isComplete {
-                    //                        NavigationLink {
-                    //                            MakeBallPage()
-                    //                        } label: {
-                    //
-                    //                        }
-                    //                    }
+                Button("감사 저장소로 보내기") {
+                    //                        isComplete = true
+                    path.append(Path.doneBall)
                 }
-            }.ignoresSafeArea(.all)
-        }
+                //                    NavigationLink(
+                //                        destination: MakeBallPage(path: $path), isActive: $isComplete
+                //                    ) {
+                //
+                //                    }.hidden()
+                //                    if isComplete {
+                //                        NavigationLink {
+                //                            MakeBallPage()
+                //                        } label: {
+                //
+                //                        }
+                //                    }
+            }
+        }.ignoresSafeArea(.all)
     }
 }
+//
+//#Preview {
+//    SelectDatePage()
+//}
 
 #Preview {
-    SelectDatePage()
+    SelectDatePage(path: .constant(NavigationPath()))
 }

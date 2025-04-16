@@ -12,9 +12,12 @@ struct ArchivePage: View {
     let columns = [GridItem(), GridItem()]
     var ball = ["defaultball", "defaultball", "defaultball"]
     var date = ["defaultball", "defaultball", "defaultball"]
+    
+    @Binding var pathArchive = NavigationPath()
+
 
     var body: some View {
-        NavigationStack {
+       
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [
@@ -30,15 +33,22 @@ struct ArchivePage: View {
                         LazyVGrid(columns: columns) {
                             ForEach(0..<ball.count, id: \.self) {
                                 index in
-                                NavigationLink {
-                                    DetailPage()
-                                } label: {
-                                    VStack {
-                                        Image(ball[index]).resizable().frame(
-                                            width: 140, height: 140)
-                                        Text(date[index])
-                                    }
+                                VStack {
+                                    Image(ball[index]).resizable().frame(
+                                        width: 140, height: 140)
+                                    Text(date[index])
+                                }.onTapGesture {
+                                    pathArchive.append(ArchivePath.detail)
                                 }
+//                                NavigationLink {
+//                                    DetailPage()
+//                                } label: {
+//                                    VStack {
+//                                        Image(ball[index]).resizable().frame(
+//                                            width: 140, height: 140)
+//                                        Text(date[index])
+//                                    }
+//                                }
                             }
 
                         }
@@ -46,9 +56,13 @@ struct ArchivePage: View {
                 }
             }
         }
-    }
+
 }
+//
+//#Preview {
+//    ArchivePage()
+//}
 
 #Preview {
-    ArchivePage()
+    ArchivePage(path2: .constant(NavigationPath()))
 }

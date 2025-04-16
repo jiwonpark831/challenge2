@@ -9,36 +9,43 @@ import SwiftUI
 
 struct MakeBallPage: View {
 
+    @Binding var path: NavigationPath
+
     var body: some View {
-        NavigationStack {
-            ZStack {
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        .cpink, .cblue,
-                    ]), startPoint: .top, endPoint: .bottom)
+        ZStack {
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    .cpink, .cblue,
+                ]), startPoint: .top, endPoint: .bottom)
+            VStack {
+                Text("구슬이 감사 저장소에 저장되었어요")
                 VStack {
-                    Text("구슬이 감사 저장소에 저장되었어요")
-                    VStack {
-                        Text(
-                            "\(CreatePage.today, formatter: CreatePage.dateformat)"
-                        )
-                        Text("사진 자리")
-                        Text("내용 자리")
-                    }.frame(width: 343, height: 495).background(
-                        RoundedRectangle(cornerRadius: 29).foregroundColor(
-                            .white
-                        ).opacity(0.5))
-                    NavigationLink {
-                        HomePage()
-                    } label: {
-                        Text("홈으로")
-                    }
+                    Text(
+                        "\(CreatePage.today, formatter: CreatePage.dateformat)"
+                    )
+                    Text("사진 자리")
+                    Text("내용 자리")
+                }.frame(width: 343, height: 495).background(
+                    RoundedRectangle(cornerRadius: 29).foregroundColor(
+                        .white
+                    ).opacity(0.7))
+                Button("홈으로") {
+                    path.removeLast(path.count)
                 }
-            }.ignoresSafeArea(.all)
-        }
+                //                    NavigationLink {
+                //                        HomePage()
+                //                    } label: {
+                //                        Text("홈으로")
+                //                    }
+            }
+        }.ignoresSafeArea(.all)
     }
 }
 
+//#Preview {
+//    MakeBallPage()
+//}
+
 #Preview {
-    MakeBallPage()
+    MakeBallPage(path: .constant(NavigationPath()))
 }

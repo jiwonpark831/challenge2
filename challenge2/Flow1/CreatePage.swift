@@ -101,9 +101,12 @@ struct CreatePage: View {
 
                 TextField(text: $newText) {
                     Text("감사 내용을 입력하세요")
-                }.frame(width: 315, height: 191, alignment: .topLeading)
-                    .background(.cwhite.opacity(0.7)).cornerRadius(
-                        10)
+                }.padding(
+                    EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
+                )
+                .frame(width: 315, height: 191, alignment: .topLeading)
+                .background(.cwhite.opacity(0.7)).cornerRadius(
+                    10)
                 Spacer().frame(height: 60)
                 Button("날짜 선택하기") {
                     if let data = picData {

@@ -33,7 +33,8 @@ struct SelectDatePage: View {
                     "", selection: $selectDate,
                     displayedComponents: [.date]
                 ).datePickerStyle(.graphical).environment(
-                    \.locale, .init(identifier: "ko_KR"))
+                    \.locale, .init(identifier: "ko_KR")
+                ).tint(.cpurple)
                 Spacer().frame(height: 70)
                 Button("감사 저장소로 보내기") {
                     //                        isComplete = true

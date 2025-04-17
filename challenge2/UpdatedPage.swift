@@ -8,36 +8,44 @@
 import SwiftUI
 
 struct UpdatedPage: View {
+
+    @Binding var path2: NavigationPath
+
     var body: some View {
-        NavigationStack {
-            ZStack {
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        .cpink, .cblue,
-                    ]), startPoint: .top, endPoint: .bottom)
+        ZStack {
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    .cpink, .cblue,
+                ]), startPoint: .top, endPoint: .bottom)
+            VStack {
+                Text("구슬이 감사 저장소에 저장되었어요")
                 VStack {
-                    Text("구슬이 감사 저장소에 저장되었어요")
-                    VStack {
-                        Text(
-                            "\(CreatePage.today, formatter: CreatePage.dateformat)"
-                        )
-                        Text("사진 자리")
-                        Text("내용 자리")
-                    }.frame(width: 343, height: 495).background(
-                        RoundedRectangle(cornerRadius: 29).foregroundColor(
-                            .cwhite
-                        ).opacity(0.7))
-                    NavigationLink {
-                        HomePage()
-                    } label: {
-                        Text("홈으로")
-                    }
+                    Text(
+                        "\(CreatePage.today, formatter: CreatePage.dateformat)"
+                    )
+                    Text("사진 자리")
+                    Text("내용 자리")
+                }.frame(width: 343, height: 495).background(
+                    RoundedRectangle(cornerRadius: 29).foregroundColor(
+                        .cwhite
+                    ).opacity(0.7))
+                Button("홈으로") {
+                    path2.removeLast(path2.count)
                 }
-            }.ignoresSafeArea(.all)
-        }
+                //                    NavigationLink {
+                //                        HomePage()
+                //                    } label: {
+                //                        Text("홈으로")
+                //                    }
+            }
+        }.ignoresSafeArea(.all)
     }
 }
 
+//#Preview {
+//    UpdatedPage()
+//}
+
 #Preview {
-    UpdatedPage()
+    UpdatedPage(path2: .constant(NavigationPath()))
 }

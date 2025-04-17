@@ -9,6 +9,6 @@ import SwiftUI
 
 enum Path: Hashable {
     case create
-    case selectDate
-    case doneBall
+    case selectDate(content: String, picData: Data)
+    case doneBall(content: String, picData: Data)
 }

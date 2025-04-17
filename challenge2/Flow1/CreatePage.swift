@@ -21,6 +21,7 @@ struct CreatePage: View {
     @State var newText: String = ""
     @State var selectPic: PhotosPickerItem? = nil
     @State var pic: Image? = nil
+    @State var picData: Data? = nil
 
     @Binding var path: NavigationPath
 
@@ -33,8 +34,13 @@ struct CreatePage: View {
                 ]), startPoint: .top, endPoint: .bottom)
             VStack {
                 Text(
-                    "\(CreatePage.today, formatter: CreatePage.dateformat)")
-                Text("아주 작은 것이라도 좋아요")
+                    "\(CreatePage.today, formatter: CreatePage.dateformat)"
+                ).foregroundColor(.ctext).font(
+                    .system(size: 24, weight: .semibold))
+                Spacer().frame(height: 40)
+                Text("아주 작은 것이라도 좋아요").foregroundColor(.ctext).font(
+                    .system(size: 16))
+                Spacer().frame(height: 50)
                 //                    ZStack {
                 //                        PhotosPicker(selection: $selectPic, matching: .images) {
                 //                            Image("selectpic").resizable().frame(
@@ -88,7 +94,7 @@ struct CreatePage: View {
                             let img = UIImage(data: data)
                         {
                             pic = Image(uiImage: img)
-                        } else {
+                            picData = data
                         }
                     }
                 }
@@ -98,9 +104,15 @@ struct CreatePage: View {
                 }.frame(width: 315, height: 191, alignment: .topLeading)
                     .background(.cwhite.opacity(0.7)).cornerRadius(
                         10)
+                Spacer().frame(height: 60)
                 Button("날짜 선택하기") {
-                    path.append(Path.selectDate)
-                }
+                    if let data = picData {
+                        path.append(
+                            Path.selectDate(content: newText, picData: data))
+                    }
+                }.frame(width: 315, height: 53).foregroundColor(.cwhite)
+                    .background(.cpurple).cornerRadius(10).font(
+                        .system(size: 20))
 
             }
         }.ignoresSafeArea(.all)

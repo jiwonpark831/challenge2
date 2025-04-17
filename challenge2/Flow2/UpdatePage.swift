@@ -24,7 +24,10 @@ struct UpdatePage: View {
                 ]), startPoint: .top, endPoint: .bottom)
             VStack {
                 Text(
-                    "\(CreatePage.today, formatter: CreatePage.dateformat)")
+                    "\(CreatePage.today, formatter: CreatePage.dateformat)"
+                ).foregroundColor(.ctext).font(
+                    .system(size: 24, weight: .semibold))
+                Spacer().frame(height: 50)
                 PhotosPicker(selection: $selectPic, matching: .images) {
                     ZStack {
                         Image("selectpic").resizable().frame(
@@ -58,9 +61,12 @@ struct UpdatePage: View {
                 }.frame(width: 315, height: 191, alignment: .topLeading)
                     .background(.cwhite.opacity(0.7)).cornerRadius(
                         10)
+                Spacer().frame(height: 70)
                 Button("감사 저장소로 보내기") {
                     path2.append(ArchivePath.doneUpdate)
-                }
+                }.frame(width: 315, height: 53).foregroundColor(.cwhite)
+                    .background(.cpurple).cornerRadius(10).font(
+                        .system(size: 20))
                 //                    NavigationLink {
                 //                        UpdatedPage()
                 //                    } label: {

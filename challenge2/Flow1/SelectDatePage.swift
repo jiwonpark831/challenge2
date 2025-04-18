@@ -27,7 +27,7 @@ struct SelectDatePage: View {
 
             VStack {
                 Text("감사 구슬을 언제 다시 열어볼까요?").foregroundColor(.cpurple).font(
-                    .system(size: 20))
+                    .system(size: 20, weight: .semibold))
                 Spacer().frame(height: 50)
                 DatePicker(
                     "", selection: $selectDate,
@@ -43,7 +43,7 @@ struct SelectDatePage: View {
                         Path.doneBall(content: content, picData: picData))
                 }.frame(width: 315, height: 53).foregroundColor(.cwhite)
                     .background(.cpurple).cornerRadius(10).font(
-                        .system(size: 20))
+                        .system(size: 20, weight: .semibold))
                 //                    NavigationLink(
                 //                        destination: MakeBallPage(path: $path), isActive: $isComplete
                 //                    ) {

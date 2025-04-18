@@ -28,7 +28,7 @@ struct DetailPage: View {
                     //                        "\(CreatePage.today, formatter: CreatePage.dateformat)"
                     //                    )
                     Text(ball.createDate).foregroundColor(.ctext).font(
-                        .system(size: 24, weight: .semibold))
+                        .system(size: 24, weight: .bold))
                     Spacer().frame(height: 30)
                     if let uiImage = UIImage(data: ball.image) {
                         Image(uiImage: uiImage).resizable().scaledToFit().frame(
@@ -46,10 +46,10 @@ struct DetailPage: View {
                 HStack {
                     Spacer()
                     Button("수정") {
-                        path2.append(ArchivePath.update)
+                        path2.append(ArchivePath.update(ball))
                     }.frame(width: 72, height: 40).foregroundColor(.cwhite)
                         .background(.ctext).cornerRadius(10).font(
-                            .system(size: 14))
+                            .system(size: 16, weight: .semibold))
                     //                        NavigationLink {
                     //                            UpdatePage()
                     //                        } label: {
@@ -59,7 +59,7 @@ struct DetailPage: View {
                         removeButton = true
                     }.frame(width: 72, height: 40).foregroundColor(.cwhite)
                         .background(.ctext).cornerRadius(10).font(
-                            .system(size: 14)
+                            .system(size: 16, weight: .semibold)
                         ).padding(.leading, 18).alert(
                             "감사 구슬을 삭제할까요?", isPresented: $removeButton
                         ) {

@@ -30,17 +30,25 @@ struct ArchivePage: View {
                 VStack {
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("지지님이 기록한").foregroundColor(.cwhite).font(
-                                .system(size: 24))
-                            Text("감사의 순간을 꺼내보세요").foregroundColor(.cwhite).font(
-                                .system(size: 24))
+                            (Text("지지").font(
+                                .system(size: 24, weight: .bold))
+                                + Text("님이 기록한").font(
+                                    .system(size: 24))).foregroundColor(.cwhite)
+                            (Text("감사의 순간").font(
+                                .system(size: 24, weight: .bold))
+                                + Text("을 꺼내보세요").font(
+                                    .system(size: 24))).foregroundColor(.cwhite)
                         }
                         Spacer()
-                    }.padding(30)
+                    }.padding(40)
                     Spacer().frame(height: 10)
                     let i = balls.count
-                    Text("총 \(i)개의 구슬이 있어요").foregroundColor(.cpink).font(
+                    (Text("총 ").font(
                         .system(size: 16))
+                        + Text("\(i)개").font(
+                            .system(size: 16, weight: .bold))
+                        + Text("의 구슬이 있어요").font(
+                            .system(size: 16))).foregroundColor(.cpink)
 
                     LazyVGrid(columns: columns) {
                         ForEach(balls, id: \.self) {

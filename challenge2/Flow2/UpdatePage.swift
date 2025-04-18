@@ -10,11 +10,14 @@ import SwiftUI
 
 struct UpdatePage: View {
 
-    @State var newText: String = ""
+    @Binding var path2: NavigationPath
+
+    let ball: Ball
+
+    @State var updateText: String = ""
     @State var selectPic: PhotosPickerItem? = nil
     @State var pic: Image? = nil
-
-    @Binding var path2: NavigationPath
+    @State var picData: Data? = nil
 
     var body: some View {
         ZStack {
@@ -24,14 +27,18 @@ struct UpdatePage: View {
                 ]), startPoint: .top, endPoint: .bottom)
             VStack {
                 Text(
-                    "\(CreatePage.today, formatter: CreatePage.dateformat)"
+                    "\(ball.createDate)"
                 ).foregroundColor(.ctext).font(
-                    .system(size: 24, weight: .semibold))
+                    .system(size: 24, weight: .bold))
                 Spacer().frame(height: 50)
                 PhotosPicker(selection: $selectPic, matching: .images) {
                     ZStack {
-                        Image("selectpic").resizable().frame(
-                            width: 71, height: 44)
+                        if let uiImage = UIImage(data: ball.image) {
+                            Image(uiImage: uiImage).resizable().scaledToFit()
+                                .frame(
+                                    width: 250
+                                ).cornerRadius(15)
+                        }
 
                         if let image = pic {
                             image
@@ -52,12 +59,13 @@ struct UpdatePage: View {
                             let img = UIImage(data: data)
                         {
                             pic = Image(uiImage: img)
+                            picData = data
                         } else {
                         }
                     }
                 }
-                TextField(text: $newText) {
-                    Text("감사 내용을 입력하세요")
+                TextField(text: $updateText, axis: .vertical) {
+                    Text("\(ball.content)")
                 }.padding(
                     EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
                 ).frame(width: 315, height: 191, alignment: .topLeading)
@@ -65,10 +73,16 @@ struct UpdatePage: View {
                         10)
                 Spacer().frame(height: 70)
                 Button("감사 저장소로 보내기") {
-                    path2.append(ArchivePath.doneUpdate)
+                    if !updateText.isEmpty {
+                        ball.content = updateText
+                    }
+                    if let newPic = picData {
+                        ball.image = newPic
+                    }
+                    path2.append(ArchivePath.doneUpdate(ball))
                 }.frame(width: 315, height: 53).foregroundColor(.cwhite)
                     .background(.cpurple).cornerRadius(10).font(
-                        .system(size: 20))
+                        .system(size: 20, weight: .semibold))
                 //                    NavigationLink {
                 //                        UpdatedPage()
                 //                    } label: {
@@ -84,6 +98,24 @@ struct UpdatePage: View {
 //    UpdatePage()
 //}
 
+//#Preview {
+//    UpdatePage(path2: .constant(NavigationPath()))
+//}
+
 #Preview {
-    UpdatePage(path2: .constant(NavigationPath()))
+    let sampleImage = UIImage(systemName: "photo")!
+    let imageData = sampleImage.jpegData(compressionQuality: 1.0) ?? Data()
+
+    let dummyBall = Ball(
+        createDate: "2025-04-15",
+        image: imageData,
+        content: "기존 감사 내용입니다.",
+        openDate: Date(),  // 현재 시간 사용
+        isOpen: false
+    )
+
+    return UpdatePage(
+        path2: .constant(NavigationPath()),
+        ball: dummyBall
+    )
 }

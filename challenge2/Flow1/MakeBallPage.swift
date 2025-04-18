@@ -20,14 +20,18 @@ struct MakeBallPage: View {
                     .cpink, .cblue,
                 ]), startPoint: .top, endPoint: .bottom)
             VStack {
-                Text("구슬이 감사 저장소에 저장되었어요").foregroundColor(.cpurple).font(
+                (Text("구슬이 ").font(
                     .system(size: 20))
+                    + Text("감사 저장소").font(
+                        .system(size: 20, weight: .bold))
+                    + Text("에 저장되었어요").font(
+                        .system(size: 20))).foregroundColor(.cpurple)
                 Spacer().frame(height: 30)
                 VStack {
                     Text(
                         "\(CreatePage.today, formatter: CreatePage.dateformat)"
                     ).foregroundColor(.ctext).font(
-                        .system(size: 24, weight: .semibold))
+                        .system(size: 24, weight: .bold))
                     Spacer().frame(height: 30)
                     if let uiImage = UIImage(data: picData) {
                         Image(uiImage: uiImage).resizable().scaledToFit().frame(
@@ -36,7 +40,8 @@ struct MakeBallPage: View {
                     }
                     Spacer().frame(height: 30)
                     Text("\(content)").foregroundColor(.cpurple).font(
-                        .system(size: 18))
+                        .system(size: 18)
+                    ).frame(width: 230)
                 }.frame(width: 343, height: 495).background(
                     RoundedRectangle(cornerRadius: 30).foregroundColor(
                         .cwhite
@@ -46,7 +51,7 @@ struct MakeBallPage: View {
                     path.removeLast(path.count)
                 }.frame(width: 315, height: 53).foregroundColor(.cwhite)
                     .background(.cpurple).cornerRadius(10).font(
-                        .system(size: 20))
+                        .system(size: 20, weight: .semibold))
                 //                    NavigationLink {
                 //                        HomePage()
                 //                    } label: {
@@ -68,7 +73,7 @@ struct MakeBallPage: View {
 #Preview {
     MakeBallPage(
         path: .constant(NavigationPath()),
-        content: "오늘의 감사: 친구와의 따뜻한 대화",
+        content: "오늘의 감사: 친구와의 따뜻한 대화ddddddddddddddddddddddddddddddddddd",
         picData: UIImage(systemName: "star.fill")!.jpegData(
             compressionQuality: 1.0)!
     )

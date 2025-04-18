@@ -11,6 +11,8 @@ struct UpdatedPage: View {
 
     @Binding var path2: NavigationPath
 
+    let ball: Ball
+
     var body: some View {
         ZStack {
             LinearGradient(
@@ -18,19 +20,28 @@ struct UpdatedPage: View {
                     .cpink, .cblue,
                 ]), startPoint: .top, endPoint: .bottom)
             VStack {
-                Text("구슬이 감사 저장소에 저장되었어요").foregroundColor(.cpurple).font(
+                (Text("구슬이 ").font(
                     .system(size: 20))
+                    + Text("감사 저장소").font(
+                        .system(size: 20, weight: .bold))
+                    + Text("에 저장되었어요").font(
+                        .system(size: 20))).foregroundColor(.cpurple)
                 Spacer().frame(height: 30)
                 VStack {
                     Text(
-                        "\(CreatePage.today, formatter: CreatePage.dateformat)"
+                        "\(ball.createDate)"
                     ).foregroundColor(.ctext).font(
-                        .system(size: 24, weight: .semibold))
+                        .system(size: 24, weight: .bold))
                     Spacer().frame(height: 30)
-                    Text("사진 자리")
+                    if let uiImage = UIImage(data: ball.image) {
+                        Image(uiImage: uiImage).resizable().scaledToFit().frame(
+                            width: 250
+                        ).cornerRadius(15)
+                    }
                     Spacer().frame(height: 30)
-                    Text("내용 자리").foregroundColor(.cpurple).font(
-                        .system(size: 18))
+                    Text("\(ball.content)").foregroundColor(.cpurple).font(
+                        .system(size: 18)
+                    ).frame(width: 230)
                 }.frame(width: 343, height: 495).background(
                     RoundedRectangle(cornerRadius: 30).foregroundColor(
                         .cwhite
@@ -40,7 +51,7 @@ struct UpdatedPage: View {
                     path2.removeLast(path2.count)
                 }.frame(width: 315, height: 53).foregroundColor(.cwhite)
                     .background(.cpurple).cornerRadius(10).font(
-                        .system(size: 20))
+                        .system(size: 20, weight: .semibold))
                 //                    NavigationLink {
                 //                        HomePage()
                 //                    } label: {
@@ -55,6 +66,24 @@ struct UpdatedPage: View {
 //    UpdatedPage()
 //}
 
+//#Preview {
+//    UpdatedPage(path2: .constant(NavigationPath()))
+//}
+
 #Preview {
-    UpdatedPage(path2: .constant(NavigationPath()))
+    let sampleImage = UIImage(systemName: "photo")!
+    let imageData = sampleImage.jpegData(compressionQuality: 1.0) ?? Data()
+
+    let dummyBall = Ball(
+        createDate: "2025-04-16",
+        image: imageData,
+        content: "감사한 마음이 담긴 구슬입니다 💜",
+        openDate: Date(),
+        isOpen: false
+    )
+
+    return UpdatedPage(
+        path2: .constant(NavigationPath()),
+        ball: dummyBall
+    )
 }

@@ -10,6 +10,6 @@ import SwiftUI
 enum ArchivePath: Hashable {
     case list
     case detail(Ball)
-    case update
-    case doneUpdate
+    case update(Ball)
+    case doneUpdate(Ball)
 }

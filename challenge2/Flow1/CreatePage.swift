@@ -36,7 +36,7 @@ struct CreatePage: View {
                 Text(
                     "\(CreatePage.today, formatter: CreatePage.dateformat)"
                 ).foregroundColor(.ctext).font(
-                    .system(size: 24, weight: .semibold))
+                    .system(size: 24, weight: .bold))
                 Spacer().frame(height: 40)
                 Text("아주 작은 것이라도 좋아요").foregroundColor(.ctext).font(
                     .system(size: 16))
@@ -99,7 +99,7 @@ struct CreatePage: View {
                     }
                 }
 
-                TextField(text: $newText) {
+                TextField(text: $newText, axis: .vertical) {
                     Text("감사 내용을 입력하세요")
                 }.padding(
                     EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
@@ -115,7 +115,7 @@ struct CreatePage: View {
                     }
                 }.frame(width: 315, height: 53).foregroundColor(.cwhite)
                     .background(.cpurple).cornerRadius(10).font(
-                        .system(size: 20))
+                        .system(size: 20, weight: .semibold))
 
             }
         }.ignoresSafeArea(.all)

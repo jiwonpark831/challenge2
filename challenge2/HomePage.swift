@@ -43,8 +43,10 @@ struct HomePage: View {
                                         ArchivePage(balls: balls, path2: $path2)
                                     case .detail(let ball):
                                         DetailPage(path2: $path2, ball: ball)
-                                    case .update: UpdatePage(path2: $path2)
-                                    case .doneUpdate: UpdatedPage(path2: $path2)
+                                    case .update(let ball):
+                                        UpdatePage(path2: $path2, ball: ball)
+                                    case .doneUpdate(let ball):
+                                        UpdatedPage(path2: $path2, ball: ball)
                                     }
                                 }
                         }.padding(30)
@@ -55,8 +57,10 @@ struct HomePage: View {
                         //                    }
                         Spacer().frame(height: 15)
                         VStack(alignment: .leading) {
-                            Text("지지님,").foregroundColor(.cwhite).font(
+                            (Text("지지").font(
                                 .system(size: 32, weight: .bold))
+                                + Text("님,").font(
+                                    .system(size: 32))).foregroundColor(.cwhite)
                             Text("오늘은 어떤 것이 감사했나요?").foregroundColor(.cwhite)
                                 .font(.system(size: 24))
                         }
@@ -86,7 +90,11 @@ struct HomePage: View {
                         //                            width: 320, height: 320)
                         //                    }
                         Spacer().frame(height: 50)
-                        Text("구슬을 눌러 감사한 일을 기록해보세요").foregroundColor(.cwhite)
+                        (Text("구슬을 눌러 ").font(
+                            .system(size: 18, weight: .bold))
+                            + Text("감사한 일을 기록해보세요").font(.system(size: 18)))
+                            .foregroundColor(
+                                .cwhite)
                         Spacer()
                     }
 

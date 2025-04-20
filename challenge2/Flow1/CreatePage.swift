@@ -25,6 +25,17 @@ struct CreatePage: View {
 
     @Binding var path: NavigationPath
 
+    @State private var isNotFill: Bool = false
+
+    var cheerUp: [String] = [
+        "아주 작은 것이라도 좋아요", "작은 감사가 큰 행복이 돼요", "이 순간에도 감사할 일이 있어요",
+        "오늘도 감사한 마음으로 하루를 시작해요", "사소해 보여도 감사하는 마음은 소중해요", "고마움을 느끼는 당신은 참 따뜻해요",
+        "감사하는 마음이 당신을 더 빛나게 해요", "오늘의 감사는 내일의 기쁨이 될 거예요", "감사할 수 있음에 감사해요",
+        "작은 감사도 마음을 채우는 선물이에요",
+    ]
+
+    @State private var cheerUpText: String = ""
+
     var body: some View {
 
         ZStack {
@@ -38,7 +49,10 @@ struct CreatePage: View {
                 ).foregroundColor(.ctext).font(
                     .system(size: 24, weight: .bold))
                 Spacer().frame(height: 40)
-                Text("아주 작은 것이라도 좋아요").foregroundColor(.ctext).font(
+                //                let cheerUpText = cheerUp.randomElement()
+                Text("\(cheerUpText ?? "아주 작은 것이라도 좋아요")").foregroundColor(
+                    .ctext
+                ).font(
                     .system(size: 16))
                 Spacer().frame(height: 50)
                 //                    ZStack {
@@ -109,16 +123,38 @@ struct CreatePage: View {
                     10)
                 Spacer().frame(height: 60)
                 Button("날짜 선택하기") {
-                    if let data = picData {
+                    if newText.isEmpty || ((picData?.isEmpty) == true)
+                        || picData == nil
+                    {
+                        isNotFill = true
+                    } else if let data = picData {
                         path.append(
                             Path.selectDate(content: newText, picData: data))
                     }
                 }.frame(width: 315, height: 53).foregroundColor(.cwhite)
                     .background(.cpurple).cornerRadius(10).font(
-                        .system(size: 20, weight: .semibold))
+                        .system(size: 20, weight: .semibold)
+                    ).alert(isPresented: $isNotFill) {
+                        Alert(
+                            title: Text("감사 구슬에 들어갈 내용이 충분하지 않아요"),
+                            dismissButton: .cancel(Text("ok")))
+                    }
 
             }
         }.ignoresSafeArea(.all)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Image(systemName: "chevron.left").foregroundColor(.ctext)
+                        .font(.system(size: 20, weight: .semibold)).onTapGesture
+                    {
+                        path.removeLast()
+                    }
+                }
+            }.onAppear {
+                cheerUpText = cheerUp.randomElement()!
+            }
+
     }
 }
 

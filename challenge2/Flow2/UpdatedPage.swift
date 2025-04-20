@@ -20,6 +20,7 @@ struct UpdatedPage: View {
                     .cpink, .cblue,
                 ]), startPoint: .top, endPoint: .bottom)
             VStack {
+                Spacer().frame(height: 30)
                 (Text("구슬이 ").font(
                     .system(size: 20))
                     + Text("감사 저장소").font(
@@ -28,6 +29,7 @@ struct UpdatedPage: View {
                         .system(size: 20))).foregroundColor(.cpurple)
                 Spacer().frame(height: 30)
                 VStack {
+                    Spacer().frame(height: 30)
                     Text(
                         "\(ball.createDate)"
                     ).foregroundColor(.ctext).font(
@@ -42,7 +44,8 @@ struct UpdatedPage: View {
                     Text("\(ball.content)").foregroundColor(.cpurple).font(
                         .system(size: 18)
                     ).frame(width: 230)
-                }.frame(width: 343, height: 495).background(
+                    Spacer().frame(height: 30)
+                }.frame(width: 343, height: 550).background(
                     RoundedRectangle(cornerRadius: 30).foregroundColor(
                         .cwhite
                     ).opacity(0.7))
@@ -59,6 +62,7 @@ struct UpdatedPage: View {
                 //                    }
             }
         }.ignoresSafeArea(.all)
+            .navigationBarBackButtonHidden(true)
     }
 }
 

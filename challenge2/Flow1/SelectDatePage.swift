@@ -58,6 +58,16 @@ struct SelectDatePage: View {
                 //                    }
             }
         }.ignoresSafeArea(.all)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Image(systemName: "chevron.left").foregroundColor(.ctext)
+                        .font(.system(size: 20, weight: .semibold)).onTapGesture
+                    {
+                        path.removeLast()
+                    }
+                }
+            }
     }
     func createBall() {
         let createDate = CreatePage.dateformat.string(from: CreatePage.today)

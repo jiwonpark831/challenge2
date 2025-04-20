@@ -33,12 +33,6 @@ struct UpdatePage: View {
                 Spacer().frame(height: 50)
                 PhotosPicker(selection: $selectPic, matching: .images) {
                     ZStack {
-                        if let uiImage = UIImage(data: ball.image) {
-                            Image(uiImage: uiImage).resizable().scaledToFit()
-                                .frame(
-                                    width: 250
-                                ).cornerRadius(15)
-                        }
 
                         if let image = pic {
                             image
@@ -46,6 +40,11 @@ struct UpdatePage: View {
                                 .scaledToFit()
                                 .frame(height: 169)
                                 .cornerRadius(10)
+                        } else if let uiImage = UIImage(data: ball.image) {
+                            Image(uiImage: uiImage).resizable().scaledToFit()
+                                .frame(
+                                    width: 250
+                                ).cornerRadius(15)
                         }
 
                     }.frame(width: 315, height: 191).background(
@@ -91,6 +90,16 @@ struct UpdatePage: View {
 
             }
         }.ignoresSafeArea(.all)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Image(systemName: "chevron.left").foregroundColor(.ctext)
+                        .font(.system(size: 20, weight: .semibold)).onTapGesture
+                    {
+                        path2.removeLast()
+                    }
+                }
+            }
     }
 }
 

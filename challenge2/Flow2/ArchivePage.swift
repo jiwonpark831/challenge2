@@ -18,6 +18,8 @@ struct ArchivePage: View {
 
     @Binding var path2: NavigationPath
 
+    @State private var closeTap: Bool = false
+
     var body: some View {
 
         ZStack {
@@ -25,12 +27,16 @@ struct ArchivePage: View {
                 gradient: Gradient(colors: [
                     .cblue, .cpink,
                 ]), startPoint: .top, endPoint: .bottom
-            ).ignoresSafeArea(.all)
+            )
             ScrollView {
+                Spacer().frame(height: 90)
                 VStack {
+
                     HStack {
                         VStack(alignment: .leading) {
-                            (Text("지지").font(
+                            (Text(
+                                "\(UserDefaults.standard.string(forKey: "username") ?? "Guest")"
+                            ).font(
                                 .system(size: 24, weight: .bold))
                                 + Text("님이 기록한").font(
                                     .system(size: 24))).foregroundColor(.cwhite)
@@ -56,10 +62,22 @@ struct ArchivePage: View {
                             VStack {
                                 if ball.isOpen == true {
                                     Image("open").resizable().frame(
-                                        width: 140, height: 140)
+                                        width: 140, height: 140
+                                    ).onTapGesture {
+                                        path2.append(ArchivePath.detail(ball))
+                                    }
                                 } else {
                                     Image("lock").resizable().frame(
-                                        width: 140, height: 140)
+                                        width: 140, height: 140
+                                    ).onTapGesture {
+                                        closeTap.toggle()
+                                    }.alert(isPresented: $closeTap) {
+                                        Alert(
+                                            title: Text("아직 열리지 않은 구슬이에요"),
+                                            message: Text(
+                                                "오픈 날짜: \(ball.openDate, formatter: CreatePage.dateformat)"
+                                            ))
+                                    }
                                 }
                                 Text(
                                     ball.createDate
@@ -68,8 +86,6 @@ struct ArchivePage: View {
                                 ).padding(.bottom, 30)
                                 //                                Text(
                                 //                                    ball.content)
-                            }.onTapGesture {
-                                path2.append(ArchivePath.detail(ball))
                             }
                             //                                NavigationLink {
                             //                                    DetailPage()
@@ -85,9 +101,18 @@ struct ArchivePage: View {
                     }.padding(30)
                 }
             }
-        }
+        }.ignoresSafeArea(.all)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Image(systemName: "chevron.left").foregroundColor(.cpink)
+                        .font(.system(size: 20, weight: .semibold)).onTapGesture
+                    {
+                        path2.removeLast()
+                    }
+                }
+            }
     }
-
 }
 //
 //#Preview {

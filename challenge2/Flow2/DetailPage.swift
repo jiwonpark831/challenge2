@@ -27,6 +27,7 @@ struct DetailPage: View {
                     //                    Text(
                     //                        "\(CreatePage.today, formatter: CreatePage.dateformat)"
                     //                    )
+                    Spacer().frame(height: 30)
                     Text(ball.createDate).foregroundColor(.ctext).font(
                         .system(size: 24, weight: .bold))
                     Spacer().frame(height: 30)
@@ -38,7 +39,8 @@ struct DetailPage: View {
                     Spacer().frame(height: 30)
                     Text(ball.content).foregroundColor(.cpurple).font(
                         .system(size: 18))
-                }.frame(width: 343, height: 495).background(
+                    Spacer().frame(height: 30)
+                }.frame(width: 343, height: 550).background(
                     RoundedRectangle(cornerRadius: 29).foregroundColor(
                         .cwhite
                     ).opacity(0.7))
@@ -60,7 +62,8 @@ struct DetailPage: View {
                     }.frame(width: 72, height: 40).foregroundColor(.cwhite)
                         .background(.ctext).cornerRadius(10).font(
                             .system(size: 16, weight: .semibold)
-                        ).padding(.leading, 18).alert(
+                        ).padding(.leading, 18)
+                        .alert(
                             "감사 구슬을 삭제할까요?", isPresented: $removeButton
                         ) {
                             Button("아니요", role: .cancel) {
@@ -73,6 +76,17 @@ struct DetailPage: View {
                 }.padding(.trailing, 50)
             }
         }.ignoresSafeArea(.all)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Image(systemName: "chevron.left").foregroundColor(.ctext)
+                        .font(.system(size: 20, weight: .semibold)).onTapGesture
+                    {
+                        path2.removeLast()
+                    }
+                }
+            }
+
     }
 }
 

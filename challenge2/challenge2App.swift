@@ -25,7 +25,7 @@ struct challenge2App: App {
 
     var body: some Scene {
         WindowGroup {
-            HomePage()
+            LoginPage()
         }
         .modelContainer(for: Ball.self)
     }

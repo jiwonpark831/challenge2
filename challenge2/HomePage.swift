@@ -7,6 +7,35 @@
 
 import SwiftData
 import SwiftUI
+import UIKit
+
+//모션감지 따와서 적용만 시켜둔거라.. 분석 필요
+class ShakeDetectingViewController: UIViewController {
+    var onShake: (() -> Void)?
+
+    override func motionEnded(
+        _ motion: UIEvent.EventSubtype, with event: UIEvent?
+    ) {
+        if motion == .motionShake {
+            onShake?()
+        }
+    }
+}
+
+struct ShakeDetector: UIViewControllerRepresentable {
+    var onShake: () -> Void
+
+    func makeUIViewController(context: Context) -> ShakeDetectingViewController
+    {
+        let controller = ShakeDetectingViewController()
+        controller.onShake = onShake
+        return controller
+    }
+
+    func updateUIViewController(
+        _ uiViewController: ShakeDetectingViewController, context: Context
+    ) {}
+}
 
 struct HomePage: View {
 
@@ -155,12 +184,13 @@ struct HomePage: View {
                                 )
                             }
                         } else {
-                            Image("closeball").resizable().frame(
-                                width: 320, height: 320
-                            )
-                            .onTapGesture {
-                                showBallPopUp.toggle()
-
+                            ZStack {
+                                Image("closeball").resizable().frame(
+                                    width: 320, height: 320
+                                )
+                                ShakeDetector {
+                                    showBallPopUp.toggle()
+                                }
                             }.fullScreenCover(
                                 isPresented: $showBallPopUp,
                                 onDismiss: {

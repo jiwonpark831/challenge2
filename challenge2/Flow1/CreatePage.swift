@@ -8,6 +8,13 @@
 import PhotosUI
 import SwiftUI
 
+//따온 코드.. 분석 필요
+extension View {
+  func hideKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+  }
+}
+
 struct CreatePage: View {
 
     static var today = Date()
@@ -26,6 +33,8 @@ struct CreatePage: View {
     @Binding var path: NavigationPath
 
     @State private var isNotFill: Bool = false
+    
+//    @FocusState private var focus: Bool
 
     var cheerUp: [String] = [
         "아주 작은 것이라도 좋아요", "작은 감사가 큰 행복이 돼요", "이 순간에도 감사할 일이 있어요",
@@ -42,7 +51,9 @@ struct CreatePage: View {
             LinearGradient(
                 gradient: Gradient(colors: [
                     .cpink, .cblue,
-                ]), startPoint: .top, endPoint: .bottom)
+                ]), startPoint: .top, endPoint: .bottom).onTapGesture {
+                    self.hideKeyboard()
+                }
             VStack {
                 Text(
                     "\(CreatePage.today, formatter: CreatePage.dateformat)"
@@ -154,7 +165,9 @@ struct CreatePage: View {
             }.onAppear {
                 cheerUpText = cheerUp.randomElement()!
             }
-
+//            .onTapGesture {
+//                focus = false
+//            }
     }
 }
 

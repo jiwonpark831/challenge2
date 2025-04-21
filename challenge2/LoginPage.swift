@@ -22,7 +22,7 @@ struct LoginPage: View {
                 ZStack {
                     LinearGradient(
                         gradient: Gradient(colors: [
-                            .cpurple, .cyellow,
+                            .cpink, .cblue,
                         ]),
                         startPoint: .top, endPoint: .bottom
                     ).ignoresSafeArea(.all)
@@ -39,7 +39,7 @@ struct LoginPage: View {
                                 username, forKey: userDefaultKey)
                             isLogin = true
                         }.frame(width: 100, height: 53).foregroundColor(.cwhite)
-                            .background(.cpurple).cornerRadius(10).font(
+                            .background(.ctext).cornerRadius(10).font(
                                 .system(size: 20, weight: .semibold))
                     }
                 }.onAppear {

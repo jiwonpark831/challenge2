@@ -67,6 +67,8 @@ struct HomePage: View {
 
     @State private var openAllTodayBall: Bool = false
 
+    @State private var ballAnimate: Bool = true
+
     var body: some View {
         NavigationStack(path: $path) {
             NavigationStack(path: $path2) {
@@ -92,9 +94,9 @@ struct HomePage: View {
                             Spacer()
                             Image(systemName: "shippingbox.fill").resizable()
                                 .frame(
-                                    width: 55, height: 55
+                                    width: 35, height: 35
                                 ).foregroundColor(
-                                    !todayBallExist ? .cyellow : .cpurple
+                                    .cwhite
                                 ).onTapGesture {
                                     path2.append(ArchivePath.list)
                                 }.navigationDestination(for: ArchivePath.self) {
@@ -153,42 +155,50 @@ struct HomePage: View {
                             }
                             Spacer()
                         }.padding(.leading, 35)
-                        if !openAllTodayBall {
-                            Spacer().frame(height: 65)
-                        } else {
-                            Spacer().frame(height: 40)
-                        }
+
+                        Spacer().frame(height: 40)
+
                         if !todayBallExist {
                             if !openAllTodayBall {
                                 Image("defaultball").resizable().frame(
-                                    width: 320, height: 320
-                                ).onTapGesture {
-                                    path.append(Path.create)
-                                }.navigationDestination(for: Path.self) {
-                                    route in
-                                    switch route {
-                                    case .create: CreatePage(path: $path)
-                                    case .selectDate(let content, let picData):
-                                        SelectDatePage(
-                                            path: $path, content: content,
-                                            picData: picData)
-                                    case .doneBall(let content, let picData):
-                                        MakeBallPage(
-                                            path: $path, content: content,
-                                            picData: picData)
+                                    width: 390, height: 390
+                                ).scaleEffect(ballAnimate ? 1.0 : 0.95)
+                                    .animation(
+                                        .linear(duration: 0.7).repeatForever(),
+                                        value: ballAnimate
+                                    ).onTapGesture {
+                                        path.append(Path.create)
+                                    }.navigationDestination(for: Path.self) {
+                                        route in
+                                        switch route {
+                                        case .create: CreatePage(path: $path)
+                                        case .selectDate(
+                                            let content, let picData):
+                                            SelectDatePage(
+                                                path: $path, content: content,
+                                                picData: picData)
+                                        case .doneBall(let content, let picData):
+                                            MakeBallPage(
+                                                path: $path, content: content,
+                                                picData: picData)
+                                        }
                                     }
-                                }
                             } else {
                                 Image("openball").resizable().frame(
-                                    width: 400, height: 400
-                                )
+                                    width: 390, height: 390
+                                ).scaleEffect(ballAnimate ? 1.0 : 0.95)
+                                    .animation(
+                                        .linear(duration: 0.7).repeatForever(),
+                                        value: ballAnimate)
                             }
                         } else {
                             ZStack {
                                 Image("closeball").resizable().frame(
-                                    width: 320, height: 320
+                                    width: 390, height: 390
                                 )
-                                ShakeDetector {
+
+                                //                                ShakeDetector
+                                .onTapGesture {
                                     showBallPopUp.toggle()
                                 }
                             }.fullScreenCover(
@@ -202,7 +212,7 @@ struct HomePage: View {
                                         todayBallExist = false
                                         openAllTodayBall = true
                                         DispatchQueue.main.asyncAfter(
-                                            deadline: .now() + 10
+                                            deadline: .now() + 5
                                         ) {
                                             openAllTodayBall = false
 
@@ -247,7 +257,7 @@ struct HomePage: View {
                         //                        Image("defaultball").resizable().frame(
                         //                            width: 320, height: 320)
                         //                    }
-                        Spacer().frame(height: 50)
+                        Spacer().frame(height: 40)
                         if !todayBallExist {
                             if !openAllTodayBall {
                                 (Text("구슬을 눌러 ").font(
@@ -280,9 +290,10 @@ struct HomePage: View {
 
                 }
                 .onAppear {
+                    ballAnimate = true
                     todayBall = balls.filter {
                         Calendar.current.isDate(
-                            $0.openDate, inSameDayAs: Date())
+                            $0.openDate, inSameDayAs: Date()) && !$0.isOpen
                     }
                     todayBallCount = todayBall.count
                     todayBallExist = !todayBall.isEmpty

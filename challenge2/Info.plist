@@ -8,10 +8,5 @@
 		<string>Pretendard-Regular.otf</string>
 		<string>Pretendard-SemiBold</string>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIImageName</key>
-		<string>launch</string>
-	</dict>
 </dict>
 </plist>

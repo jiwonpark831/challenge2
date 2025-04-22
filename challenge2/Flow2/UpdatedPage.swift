@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UpdatedPage: View {
 
-    @Binding var path2: NavigationPath
+    @Binding var path: NavigationPath
 
     let ball: Ball
 
@@ -51,7 +51,7 @@ struct UpdatedPage: View {
                     ).opacity(0.7))
                 Spacer().frame(height: 45)
                 Button("홈으로") {
-                    path2.removeLast(path2.count)
+                    path.removeLast(path.count)
                 }.frame(width: 315, height: 53).foregroundColor(.cwhite)
                     .background(.cpurple).cornerRadius(10).font(
                         .system(size: 20, weight: .semibold))
@@ -87,7 +87,7 @@ struct UpdatedPage: View {
     )
 
     return UpdatedPage(
-        path2: .constant(NavigationPath()),
+        path: .constant(NavigationPath()),
         ball: dummyBall
     )
 }

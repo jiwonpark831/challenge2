@@ -8,7 +8,12 @@
 import SwiftUI
 
 enum Path: Hashable {
+    case home
     case create
     case selectDate(content: String, picData: Data)
     case doneBall(content: String, picData: Data)
+    case list
+    case detail(Ball)
+    case update(Ball)
+    case doneUpdate(Ball)
 }

@@ -10,25 +10,25 @@ import SwiftUI
 import UIKit
 
 //모션감지 따와서 적용만 시켜둔거라.. 분석 필요
-class ShakeDetectingViewController: UIViewController {
+class ShakeDetectingViewController: UIViewController {  // UIKit의 UIViewController를 상속받은 커스텀 뷰 컨트롤러 디바이스가 흔들렸을 때 이벤트를 감지해서 외부에서 전달받은 onShake 클로저를 실행
     var onShake: (() -> Void)?
 
-    override func motionEnded(
+    override func motionEnded(  // 사용자가 디바이스를 흔들고 나서 동작이 끝났을 때 호출되는 UIKit의 기본 메서드
         _ motion: UIEvent.EventSubtype, with event: UIEvent?
     ) {
-        if motion == .motionShake {
-            onShake?()
+        if motion == .motionShake {  // 흔들기 이벤트인지 확인하는 조건
+            onShake?()  // 흔들기 감지되면 외부에서 정의한 동작 실행
         }
     }
 }
 
-struct ShakeDetector: UIViewControllerRepresentable {
-    var onShake: () -> Void
+struct ShakeDetector: UIViewControllerRepresentable {  // SwiftUI에서는 UIViewController를 직접 사용할 수 없어서 SwiftUI에서 사용할 수 있도록 래핑
+    var onShake: () -> Void  // 흔들렸을 때 실행할 동작을 SwiftUI 쪽에서 정의 가능하게 해줌
 
     func makeUIViewController(context: Context) -> ShakeDetectingViewController
     {
-        let controller = ShakeDetectingViewController()
-        controller.onShake = onShake
+        let controller = ShakeDetectingViewController()  //     ShakeDetectingViewController 인스턴스 생성
+        controller.onShake = onShake  // 연결
         return controller
     }
 
@@ -42,8 +42,8 @@ struct HomePage: View {
     @Environment(\.modelContext) private var context
     @Query private var balls: [Ball]
 
-    @State var path = NavigationPath()
-    @State var path2 = NavigationPath()
+    @Binding var path: NavigationPath
+    //    @State var path2 = NavigationPath()
 
     private var questions: [String] = [
         "오늘은 어떤 것이 감사했나요?",
@@ -69,242 +69,215 @@ struct HomePage: View {
 
     @State private var ballAnimate: Bool = true
 
+    init(path: Binding<NavigationPath>) {
+        self._path = path
+    }
+
     var body: some View {
-        NavigationStack(path: $path) {
-            NavigationStack(path: $path2) {
-                ZStack {
-                    if !todayBallExist {
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                .cpurple, .cyellow,
-                            ]),
-                            startPoint: .top, endPoint: .bottom
-                        ).ignoresSafeArea(.all)
-                    } else {
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                .cyellow, .cpurple,
-                            ]),
-                            startPoint: .top, endPoint: .bottom
-                        ).ignoresSafeArea(.all)
-                    }
-
-                    VStack {
-                        HStack {
-                            Spacer()
-                            Image(systemName: "shippingbox.fill").resizable()
-                                .frame(
-                                    width: 35, height: 35
-                                ).foregroundColor(
-                                    .cwhite
-                                ).onTapGesture {
-                                    path2.append(ArchivePath.list)
-                                }.navigationDestination(for: ArchivePath.self) {
-                                    route in
-                                    switch route {
-                                    case .list:
-                                        ArchivePage(balls: balls, path2: $path2)
-                                    case .detail(let ball):
-                                        DetailPage(path2: $path2, ball: ball)
-                                    case .update(let ball):
-                                        UpdatePage(path2: $path2, ball: ball)
-                                    case .doneUpdate(let ball):
-                                        UpdatedPage(path2: $path2, ball: ball)
-                                    }
-                                }
-                        }.padding(30)
-                        //                    NavigationLink {
-                        //                        ArchivePage()
-                        //                    } label: {
-                        //                        Image(systemName: "shippingbox.fill")
-                        //                    }
-                        Spacer().frame(height: 15)
-
-                        HStack {
-                            VStack(alignment: .leading) {
-                                (Text(
-                                    "\(UserDefaults.standard.string(forKey: "username") ?? "Guest")"
-                                ).font(
-                                    .system(size: 32, weight: .bold))
-                                    + Text("님,").font(
-                                        .system(size: 32))).foregroundColor(
-                                        .cwhite)
-                                let question = questions.randomElement()
-                                if !todayBallExist {
-                                    if !openAllTodayBall {
-                                        Text(
-                                            "\(question ?? "오늘은 어떤 것이 감사했나요?")"
-                                        )
-                                        .foregroundColor(.cwhite)
-                                        .font(.system(size: 24)).frame(
-                                            width: 290, alignment: .leading)
-                                    } else {
-                                        Text("감사 구슬이 빛나고 있어요").foregroundColor(
-                                            .cwhite
-                                        )
-                                        .font(.system(size: 24)).frame(
-                                            width: 290, alignment: .leading)
-                                    }
-                                } else {
-                                    Text("오늘 열어볼 감사 구슬이 도착했어요").foregroundColor(
-                                        .cwhite
-                                    )
-                                    .font(.system(size: 20)).frame(
-                                        width: 290, alignment: .leading)
-                                }
-                            }
-                            Spacer()
-                        }.padding(.leading, 35)
-
-                        Spacer().frame(height: 40)
-
-                        if !todayBallExist {
-                            if !openAllTodayBall {
-                                Image("defaultball").resizable().frame(
-                                    width: 390, height: 390
-                                ).scaleEffect(ballAnimate ? 1.0 : 0.95)
-                                    .animation(
-                                        .linear(duration: 0.7).repeatForever(),
-                                        value: ballAnimate
-                                    ).onTapGesture {
-                                        path.append(Path.create)
-                                    }.navigationDestination(for: Path.self) {
-                                        route in
-                                        switch route {
-                                        case .create: CreatePage(path: $path)
-                                        case .selectDate(
-                                            let content, let picData):
-                                            SelectDatePage(
-                                                path: $path, content: content,
-                                                picData: picData)
-                                        case .doneBall(let content, let picData):
-                                            MakeBallPage(
-                                                path: $path, content: content,
-                                                picData: picData)
-                                        }
-                                    }
-                            } else {
-                                Image("openball").resizable().frame(
-                                    width: 390, height: 390
-                                ).scaleEffect(ballAnimate ? 1.0 : 0.95)
-                                    .animation(
-                                        .linear(duration: 0.7).repeatForever(),
-                                        value: ballAnimate)
-                            }
-                        } else {
-                            ZStack {
-                                Image("closeball").resizable().frame(
-                                    width: 390, height: 390
-                                )
-
-                                //                                ShakeDetector
-                                .onTapGesture {
-                                    showBallPopUp.toggle()
-                                }
-                            }.fullScreenCover(
-                                isPresented: $showBallPopUp,
-                                onDismiss: {
-                                    todayBallCountIndex += 1
-                                    if todayBallCountIndex < todayBallCount {
-                                        showBallPopUp = true
-                                    } else {
-                                        todayBallCountIndex = 0
-                                        todayBallExist = false
-                                        openAllTodayBall = true
-                                        DispatchQueue.main.asyncAfter(
-                                            deadline: .now() + 5
-                                        ) {
-                                            openAllTodayBall = false
-
-                                        }
-                                    }
-                                }
-                            ) {
-
-                                VStack {
-                                    Text(
-                                        todayBall[todayBallCountIndex]
-                                            .createDate
-                                    ).foregroundColor(.ctext).font(
-                                        .system(size: 24, weight: .bold))
-                                    Spacer().frame(height: 30)
-                                    if let uiImage = UIImage(
-                                        data: todayBall[todayBallCountIndex]
-                                            .image)
-                                    {
-                                        Image(uiImage: uiImage).resizable()
-                                            .scaledToFit().frame(
-                                                width: 250
-                                            ).cornerRadius(15)
-                                    }
-                                    Spacer().frame(height: 30)
-                                    Text(todayBall[todayBallCountIndex].content)
-                                        .foregroundColor(.cpurple).font(
-                                            .system(size: 18))
-                                }.onTapGesture {
-                                    todayBall[todayBallCountIndex].isOpen = true
-                                    showBallPopUp = false
-                                }.presentationBackground(.ultraThinMaterial)
-                            }
-                            //                            }.transaction {
-                            //                                transaction in
-                            //                                transaction.disablesAnimations = true
-                            //                            }
-                        }
-                        //                    NavigationLink {
-                        //                        CreatePage(path: $path)
-                        //                    } label: {
-                        //                        Image("defaultball").resizable().frame(
-                        //                            width: 320, height: 320)
-                        //                    }
-                        Spacer().frame(height: 40)
-                        if !todayBallExist {
-                            if !openAllTodayBall {
-                                (Text("구슬을 눌러 ").font(
-                                    .system(size: 18, weight: .bold))
-                                    + Text("감사한 일을 기록해보세요").font(
-                                        .system(size: 18)))
-                                    .foregroundColor(
-                                        .cwhite)
-                            } else {
-                                Text("오늘도 감사가 넘치는 하루 보내세요").font(
-                                    .system(size: 18)
-                                )
-                                .foregroundColor(
-                                    .cwhite)
-                            }
-                        } else {
-                            (Text("핸드폰을 ").font(.system(size: 18)))
-                                .foregroundColor(
-                                    .cwhite)
-                                + Text("흔들어 ").font(
-                                    .system(size: 18, weight: .bold)
-                                ).foregroundColor(
-                                    .cwhite)
-                                + Text("구슬을 열어보세요").font(.system(size: 18))
-                                .foregroundColor(
-                                    .cwhite)
-                        }
-                        Spacer()
-                    }
-
-                }
-                .onAppear {
-                    ballAnimate = true
-                    todayBall = balls.filter {
-                        Calendar.current.isDate(
-                            $0.openDate, inSameDayAs: Date()) && !$0.isOpen
-                    }
-                    todayBallCount = todayBall.count
-                    todayBallExist = !todayBall.isEmpty
-                }
+        ZStack {
+            if !todayBallExist {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        .cpurple, .cyellow,
+                    ]),
+                    startPoint: .top, endPoint: .bottom
+                ).ignoresSafeArea(.all)
+            } else {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        .cyellow, .cpurple,
+                    ]),
+                    startPoint: .top, endPoint: .bottom
+                ).ignoresSafeArea(.all)
             }
+
+            VStack {
+                HStack {
+                    Spacer()
+                    Image(systemName: "shippingbox.fill").resizable()
+                        .frame(
+                            width: 35, height: 35
+                        ).foregroundColor(
+                            .cwhite
+                        ).onTapGesture {
+                            path.append(Path.list)
+                        }
+                }.padding(30)
+                //                    NavigationLink {
+                //                        ArchivePage()
+                //                    } label: {
+                //                        Image(systemName: "shippingbox.fill")
+                //                    }
+                Spacer().frame(height: 15)
+
+                HStack {
+                    VStack(alignment: .leading) {
+                        (Text(
+                            "\(UserDefaults.standard.string(forKey: "username") ?? "Guest")"
+                        ).font(
+                            .system(size: 32, weight: .bold))
+                            + Text("님,").font(
+                                .system(size: 32))).foregroundColor(
+                                .cwhite)
+                        let question = questions.randomElement()
+                        if !todayBallExist {
+                            if !openAllTodayBall {
+                                Text(
+                                    "\(question ?? "오늘은 어떤 것이 감사했나요?")"
+                                )
+                                .foregroundColor(.cwhite)
+                                .font(.system(size: 24)).frame(
+                                    width: 290, alignment: .leading)
+                            } else {
+                                Text("감사 구슬이 빛나고 있어요").foregroundColor(
+                                    .cwhite
+                                )
+                                .font(.system(size: 24)).frame(
+                                    width: 290, alignment: .leading)
+                            }
+                        } else {
+                            Text("오늘 열어볼 감사 구슬이 도착했어요").foregroundColor(
+                                .cwhite
+                            )
+                            .font(.system(size: 20)).frame(
+                                width: 290, alignment: .leading)
+                        }
+                    }
+                    Spacer()
+                }.padding(.leading, 35)
+
+                Spacer().frame(height: 40)
+
+                if !todayBallExist {
+                    if !openAllTodayBall {
+                        Image("defaultball").resizable().frame(
+                            width: 390, height: 390
+                        ).scaleEffect(ballAnimate ? 1.0 : 0.95)
+                            .animation(
+                                .linear(duration: 0.7).repeatForever(),
+                                value: ballAnimate
+                            ).onTapGesture {
+                                path.append(Path.create)
+                            }
+                    } else {
+                        Image("openball").resizable().frame(
+                            width: 390, height: 390
+                        ).scaleEffect(ballAnimate ? 1.0 : 0.95)
+                            .animation(
+                                .linear(duration: 0.7).repeatForever(),
+                                value: ballAnimate)
+                    }
+                } else {
+                    ZStack {
+                        Image("closeball").resizable().frame(
+                            width: 390, height: 390
+                        )
+                        ShakeDetector {
+                            showBallPopUp.toggle()
+                        }
+                    }.fullScreenCover(
+                        isPresented: $showBallPopUp,
+                        onDismiss: {
+                            todayBallCountIndex += 1
+                            if todayBallCountIndex < todayBallCount {
+                                showBallPopUp = true
+                            } else {
+                                todayBallCountIndex = 0
+                                todayBallExist = false
+                                openAllTodayBall = true
+                                DispatchQueue.main.asyncAfter(
+                                    deadline: .now() + 5
+                                ) {
+                                    openAllTodayBall = false
+
+                                }
+                            }
+                        }
+                    ) {
+
+                        VStack {
+                            Text(
+                                todayBall[todayBallCountIndex]
+                                    .createDate
+                            ).foregroundColor(.ctext).font(
+                                .system(size: 24, weight: .bold))
+                            Spacer().frame(height: 30)
+                            if let uiImage = UIImage(
+                                data: todayBall[todayBallCountIndex]
+                                    .image)
+                            {
+                                Image(uiImage: uiImage).resizable()
+                                    .scaledToFit().frame(
+                                        width: 250
+                                    ).cornerRadius(15)
+                            }
+                            Spacer().frame(height: 30)
+                            Text(todayBall[todayBallCountIndex].content)
+                                .foregroundColor(.cpurple).font(
+                                    .system(size: 18))
+                        }.onTapGesture {
+                            todayBall[todayBallCountIndex].isOpen = true
+                            showBallPopUp = false
+                        }.presentationBackground(.ultraThinMaterial)
+                    }
+                    //                            }.transaction {
+                    //                                transaction in
+                    //                                transaction.disablesAnimations = true
+                    //                            }
+                }
+                //                    NavigationLink {
+                //                        CreatePage(path: $path)
+                //                    } label: {
+                //                        Image("defaultball").resizable().frame(
+                //                            width: 320, height: 320)
+                //                    }
+                Spacer().frame(height: 40)
+                if !todayBallExist {
+                    if !openAllTodayBall {
+                        (Text("구슬을 눌러 ").font(
+                            .system(size: 18, weight: .bold))
+                            + Text("감사한 일을 기록해보세요").font(
+                                .system(size: 18)))
+                            .foregroundColor(
+                                .cwhite)
+                    } else {
+                        Text("오늘도 감사가 넘치는 하루 보내세요").font(
+                            .system(size: 18)
+                        )
+                        .foregroundColor(
+                            .cwhite)
+                    }
+                } else {
+                    (Text("핸드폰을 ").font(.system(size: 18)))
+                        .foregroundColor(
+                            .cwhite)
+                        + Text("흔들어 ").font(
+                            .system(size: 18, weight: .bold)
+                        ).foregroundColor(
+                            .cwhite)
+                        + Text("구슬을 열어보세요").font(.system(size: 18))
+                        .foregroundColor(
+                            .cwhite)
+                }
+                Spacer()
+            }
+
+        }
+        .onAppear {
+            ballAnimate = true
+            todayBall = balls.filter {
+                Calendar.current.isDate(
+                    $0.openDate, inSameDayAs: Date()) && !$0.isOpen
+            }
+            todayBallCount = todayBall.count
+            todayBallExist = !todayBall.isEmpty
         }
     }
 }
 
 #Preview {
-    HomePage().modelContainer(for: Ball.self, inMemory: true)
+    HomePage(path: .constant(NavigationPath())).modelContainer(
+        for: Ball.self, inMemory: true)
 }
 
 //#Preview {

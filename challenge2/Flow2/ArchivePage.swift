@@ -16,7 +16,7 @@ struct ArchivePage: View {
     //    var ball = ["defaultball", "defaultball", "defaultball"]
     //    var date = ["defaultball", "defaultball", "defaultball"]
 
-    @Binding var path2: NavigationPath
+    @Binding var path: NavigationPath
 
     @State private var closeTap: Bool = false
 
@@ -64,7 +64,7 @@ struct ArchivePage: View {
                                     Image("open").resizable().frame(
                                         width: 140, height: 140
                                     ).onTapGesture {
-                                        path2.append(ArchivePath.detail(ball))
+                                        path.append(Path.detail(ball))
                                     }
                                 } else {
                                     Image("lock").resizable().frame(
@@ -108,7 +108,7 @@ struct ArchivePage: View {
                     Image(systemName: "chevron.left").foregroundColor(.cpink)
                         .font(.system(size: 20, weight: .semibold)).onTapGesture
                     {
-                        path2.removeLast()
+                        path.removeLast()
                     }
                 }
             }
@@ -149,5 +149,5 @@ struct ArchivePage: View {
         ),
     ]
 
-    return ArchivePage(balls: dummyBalls, path2: .constant(NavigationPath()))
+    return ArchivePage(balls: dummyBalls, path: .constant(NavigationPath()))
 }

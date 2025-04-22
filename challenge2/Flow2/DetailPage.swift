@@ -12,7 +12,7 @@ struct DetailPage: View {
     @Environment(\.modelContext) private var context
 
     @State private var removeButton: Bool = false
-    @Binding var path2: NavigationPath
+    @Binding var path: NavigationPath
 
     let ball: Ball
 
@@ -48,7 +48,7 @@ struct DetailPage: View {
                 HStack {
                     Spacer()
                     Button("수정") {
-                        path2.append(ArchivePath.update(ball))
+                        path.append(Path.update(ball))
                     }.frame(width: 72, height: 40).foregroundColor(.cwhite)
                         .background(.ctext).cornerRadius(10).font(
                             .system(size: 16, weight: .semibold))
@@ -70,7 +70,7 @@ struct DetailPage: View {
                             }
                             Button("네") {
                                 context.delete(ball)
-                                path2.removeLast()
+                                path.removeLast()
                             }
                         }
                 }.padding(.trailing, 50)
@@ -82,7 +82,7 @@ struct DetailPage: View {
                     Image(systemName: "chevron.left").foregroundColor(.ctext)
                         .font(.system(size: 20, weight: .semibold)).onTapGesture
                     {
-                        path2.removeLast()
+                        path.removeLast()
                     }
                 }
             }
@@ -109,5 +109,5 @@ struct DetailPage: View {
         isOpen: true
     )
 
-    return DetailPage(path2: .constant(NavigationPath()), ball: dummyBall)
+    return DetailPage(path: .constant(NavigationPath()), ball: dummyBall)
 }

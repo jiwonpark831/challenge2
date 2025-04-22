@@ -10,7 +10,7 @@ import SwiftUI
 
 struct UpdatePage: View {
 
-    @Binding var path2: NavigationPath
+    @Binding var path: NavigationPath
 
     let ball: Ball
 
@@ -78,7 +78,7 @@ struct UpdatePage: View {
                     if let newPic = picData {
                         ball.image = newPic
                     }
-                    path2.append(ArchivePath.doneUpdate(ball))
+                    path.append(Path.doneUpdate(ball))
                 }.frame(width: 315, height: 53).foregroundColor(.cwhite)
                     .background(.cpurple).cornerRadius(10).font(
                         .system(size: 20, weight: .semibold))
@@ -96,7 +96,7 @@ struct UpdatePage: View {
                     Image(systemName: "chevron.left").foregroundColor(.ctext)
                         .font(.system(size: 20, weight: .semibold)).onTapGesture
                     {
-                        path2.removeLast()
+                        path.removeLast()
                     }
                 }
             }
@@ -124,7 +124,7 @@ struct UpdatePage: View {
     )
 
     return UpdatePage(
-        path2: .constant(NavigationPath()),
+        path: .constant(NavigationPath()),
         ball: dummyBall
     )
 }

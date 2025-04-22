@@ -58,16 +58,16 @@ struct HomePage: View {
         "오늘의 감사를 남겨보세요",
     ]
 
-    @State private var todayBallExist: Bool = false
-    @State private var todayBall: [Ball] = []
+    @State private var isTodayBallExist: Bool = false
+    @State private var closedTodayBalls: [Ball] = []
 
-    @State private var showBallPopUp: Bool = false
-    @State private var todayBallCount: Int = 0
+    @State private var isShowingBallPopUp: Bool = false
+    @State private var closedTodayBallCount: Int = 0
     @State private var todayBallCountIndex: Int = 0
 
-    @State private var openAllTodayBall: Bool = false
+    @State private var didOpenAllBalls: Bool = false
 
-    @State private var ballAnimate: Bool = true
+    @State private var isBallBouncing: Bool = true
 
     init(path: Binding<NavigationPath>) {
         self._path = path
@@ -75,7 +75,7 @@ struct HomePage: View {
 
     var body: some View {
         ZStack {
-            if !todayBallExist {
+            if !isTodayBallExist {
                 LinearGradient(
                     gradient: Gradient(colors: [
                         .cpurple, .cyellow,
@@ -120,8 +120,8 @@ struct HomePage: View {
                                 .system(size: 32))).foregroundColor(
                                 .cwhite)
                         let question = questions.randomElement()
-                        if !todayBallExist {
-                            if !openAllTodayBall {
+                        if !isTodayBallExist {
+                            if !didOpenAllBalls {
                                 Text(
                                     "\(question ?? "오늘은 어떤 것이 감사했나요?")"
                                 )
@@ -148,24 +148,24 @@ struct HomePage: View {
 
                 Spacer().frame(height: 40)
 
-                if !todayBallExist {
-                    if !openAllTodayBall {
+                if !isTodayBallExist {
+                    if !didOpenAllBalls {
                         Image("defaultball").resizable().frame(
                             width: 390, height: 390
-                        ).scaleEffect(ballAnimate ? 1.0 : 0.95)
+                        ).scaleEffect(isBallBouncing ? 1.0 : 0.95)
                             .animation(
                                 .linear(duration: 0.7).repeatForever(),
-                                value: ballAnimate
+                                value: isBallBouncing
                             ).onTapGesture {
                                 path.append(Path.create)
                             }
                     } else {
                         Image("openball").resizable().frame(
                             width: 390, height: 390
-                        ).scaleEffect(ballAnimate ? 1.0 : 0.95)
+                        ).scaleEffect(isBallBouncing ? 1.0 : 0.95)
                             .animation(
                                 .linear(duration: 0.7).repeatForever(),
-                                value: ballAnimate)
+                                value: isBallBouncing)
                     }
                 } else {
                     ZStack {
@@ -173,22 +173,22 @@ struct HomePage: View {
                             width: 390, height: 390
                         )
                         ShakeDetector {
-                            showBallPopUp.toggle()
+                            isShowingBallPopUp.toggle()
                         }
                     }.fullScreenCover(
-                        isPresented: $showBallPopUp,
+                        isPresented: $isShowingBallPopUp,
                         onDismiss: {
                             todayBallCountIndex += 1
-                            if todayBallCountIndex < todayBallCount {
-                                showBallPopUp = true
+                            if todayBallCountIndex < closedTodayBallCount {
+                                isShowingBallPopUp = true
                             } else {
                                 todayBallCountIndex = 0
-                                todayBallExist = false
-                                openAllTodayBall = true
+                                isTodayBallExist = false
+                                didOpenAllBalls = true
                                 DispatchQueue.main.asyncAfter(
                                     deadline: .now() + 5
                                 ) {
-                                    openAllTodayBall = false
+                                    didOpenAllBalls = false
 
                                 }
                             }
@@ -197,13 +197,13 @@ struct HomePage: View {
 
                         VStack {
                             Text(
-                                todayBall[todayBallCountIndex]
+                                closedTodayBalls[todayBallCountIndex]
                                     .createDate
                             ).foregroundColor(.ctext).font(
                                 .system(size: 24, weight: .bold))
                             Spacer().frame(height: 30)
                             if let uiImage = UIImage(
-                                data: todayBall[todayBallCountIndex]
+                                data: closedTodayBalls[todayBallCountIndex]
                                     .image)
                             {
                                 Image(uiImage: uiImage).resizable()
@@ -212,12 +212,12 @@ struct HomePage: View {
                                     ).cornerRadius(15)
                             }
                             Spacer().frame(height: 30)
-                            Text(todayBall[todayBallCountIndex].content)
+                            Text(closedTodayBalls[todayBallCountIndex].content)
                                 .foregroundColor(.cpurple).font(
                                     .system(size: 18))
                         }.onTapGesture {
-                            todayBall[todayBallCountIndex].isOpen = true
-                            showBallPopUp = false
+                            closedTodayBalls[todayBallCountIndex].isOpen = true
+                            isShowingBallPopUp = false
                         }.presentationBackground(.ultraThinMaterial)
                     }
                     //                            }.transaction {
@@ -232,8 +232,8 @@ struct HomePage: View {
                 //                            width: 320, height: 320)
                 //                    }
                 Spacer().frame(height: 40)
-                if !todayBallExist {
-                    if !openAllTodayBall {
+                if !isTodayBallExist {
+                    if !didOpenAllBalls {
                         (Text("구슬을 눌러 ").font(
                             .system(size: 18, weight: .bold))
                             + Text("감사한 일을 기록해보세요").font(
@@ -264,13 +264,13 @@ struct HomePage: View {
 
         }
         .onAppear {
-            ballAnimate = true
-            todayBall = balls.filter {
+            isBallBouncing = true
+            closedTodayBalls = balls.filter {
                 Calendar.current.isDate(
                     $0.openDate, inSameDayAs: Date()) && !$0.isOpen
             }
-            todayBallCount = todayBall.count
-            todayBallExist = !todayBall.isEmpty
+            closedTodayBallCount = closedTodayBalls.count
+            isTodayBallExist = !closedTodayBalls.isEmpty
         }
     }
 }

@@ -10,13 +10,13 @@ import SwiftUI
 struct ArchivePage: View {
 
     @Environment(\.modelContext) private var context
+
+    @Binding var path: NavigationPath
     var balls: [Ball]
 
     let columns = [GridItem(), GridItem()]
     //    var ball = ["defaultball", "defaultball", "defaultball"]
     //    var date = ["defaultball", "defaultball", "defaultball"]
-
-    @Binding var path: NavigationPath
 
     @State private var closeTap: Bool = false
 
@@ -149,5 +149,5 @@ struct ArchivePage: View {
         ),
     ]
 
-    return ArchivePage(balls: dummyBalls, path: .constant(NavigationPath()))
+    return ArchivePage(path: .constant(NavigationPath()), balls: dummyBalls)
 }

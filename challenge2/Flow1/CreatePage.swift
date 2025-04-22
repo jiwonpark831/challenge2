@@ -27,10 +27,10 @@ struct CreatePage: View {
         return format
     }()
 
-    @State var newText: String = ""
-    @State var selectPic: PhotosPickerItem? = nil
-    @State var pic: Image? = nil
-    @State var picData: Data? = nil
+    @State private var newText: String = ""
+    @State private var selectPic: PhotosPickerItem? = nil
+    @State private var pic: Image? = nil
+    @State private var picData: Data? = nil
 
     @Binding var path: NavigationPath
 

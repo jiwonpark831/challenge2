@@ -33,7 +33,7 @@ struct ContentView: View {
                             path: $path, content: content,
                             picData: picData)
                     case .list:
-                        ArchivePage(balls: balls, path: $path)
+                        ArchivePage(path: $path, balls: balls)
                     case .detail(let ball):
                         DetailPage(path: $path, ball: ball)
                     case .update(let ball):

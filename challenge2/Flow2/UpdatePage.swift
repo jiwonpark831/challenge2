@@ -14,10 +14,10 @@ struct UpdatePage: View {
 
     let ball: Ball
 
-    @State var updateText: String = ""
-    @State var selectPic: PhotosPickerItem? = nil
-    @State var pic: Image? = nil
-    @State var picData: Data? = nil
+    @State private var updateText: String = ""
+    @State private var selectPic: PhotosPickerItem? = nil
+    @State private var pic: Image? = nil
+    @State private var picData: Data? = nil
 
     var body: some View {
         ZStack {

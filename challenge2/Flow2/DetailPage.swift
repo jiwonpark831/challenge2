@@ -12,6 +12,7 @@ struct DetailPage: View {
     @Environment(\.modelContext) private var context
 
     @State private var removeButton: Bool = false
+
     @Binding var path: NavigationPath
 
     let ball: Ball

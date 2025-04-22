@@ -12,7 +12,7 @@ struct SelectDatePage: View {
     @Environment(\.modelContext) private var context
 
     //    @State private var isComplete = false
-    @State var selectDate = Date()
+    @State private var selectDate = Date()
     @Binding var path: NavigationPath
 
     let content: String
@@ -69,7 +69,7 @@ struct SelectDatePage: View {
                 }
             }
     }
-    func createBall() {
+    private func createBall() {
         let createDate = CreatePage.dateformat.string(from: CreatePage.today)
         let newBall = Ball(
             createDate:

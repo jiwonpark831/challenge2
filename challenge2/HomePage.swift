@@ -151,7 +151,7 @@ struct HomePage: View {
                 if !isTodayBallExist {
                     if !didOpenAllBalls {
                         Image("defaultball").resizable().frame(
-                            width: 390, height: 390
+                            width: 400, height: 400
                         ).scaleEffect(isBallBouncing ? 1.0 : 0.95)
                             .animation(
                                 .linear(duration: 0.7).repeatForever(),
@@ -161,7 +161,7 @@ struct HomePage: View {
                             }
                     } else {
                         Image("openball").resizable().frame(
-                            width: 390, height: 390
+                            width: 400, height: 400
                         ).scaleEffect(isBallBouncing ? 1.0 : 0.95)
                             .animation(
                                 .linear(duration: 0.7).repeatForever(),
@@ -170,9 +170,11 @@ struct HomePage: View {
                 } else {
                     ZStack {
                         Image("closeball").resizable().frame(
-                            width: 390, height: 390
+                            width: 400, height: 400
                         )
-                        ShakeDetector {
+                        
+//                        ShakeDetector
+                        .onTapGesture {
                             isShowingBallPopUp.toggle()
                         }
                     }.fullScreenCover(

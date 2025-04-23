@@ -62,13 +62,13 @@ struct ArchivePage: View {
                             VStack {
                                 if ball.isOpen == true {
                                     Image("open").resizable().frame(
-                                        width: 140, height: 140
+                                        width: 160, height: 160
                                     ).onTapGesture {
                                         path.append(Path.detail(ball))
                                     }
                                 } else {
                                     Image("lock").resizable().frame(
-                                        width: 140, height: 140
+                                        width: 160, height: 160
                                     ).onTapGesture {
                                         closeTap.toggle()
                                     }.alert(isPresented: $closeTap) {
